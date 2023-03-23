@@ -1,7 +1,9 @@
 <?php
 session_start();
+ob_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
   // get input values from form
   $username = $_POST["username"];
   $password = $_POST["password"];
@@ -33,15 +35,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // check if user exists and password is correct
   if ($result->num_rows == 1) {
     $row = $result->fetch_assoc();
-    if (password_verify($password, $row['password'])) {
+    $plaintext_password = $_POST["password"];
+    if (password_verify($plaintext_password, $row['password'])) {
       $_SESSION["username"] = $row['username'];
+      session_write_close();
       header("Location: index.php");
       exit();
-    } 
-    else {
-      echo "Invalid username or password";
+    } else {
+      //echo "Invalid username or password";
     }
-  } 
+  } else {
+    echo "Invalid username or password";
+  }
+}
+
+// function to hash password using bcrypt algorithm
+function hashPassword($password) {
+  $options = [
+    'cost' => 12, // number of times to apply the hash function (higher is more secure but slower)
+  ];
+  return password_hash($password, PASSWORD_BCRYPT, $options);
 }
 ?>
 
