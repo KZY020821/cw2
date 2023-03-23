@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-
+// test
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // get input values from form
