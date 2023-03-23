@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $dbServerName = "localhost";
   $dbUserName = "root";
   $dbPassword = "";
-  $dbName = "5614ycom_cw2";
+  $dbName = "5614ycom_CW";
   $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
 
   // if error occurs 

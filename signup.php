@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dbServerName = "localhost";
     $dbUserName = "root";
     $dbPassword = "";
-    $dbName = "5614ycom_cw2";
+    $dbName = "5614ycom_CW";
 
     // Connect to database
     $conn = mysqli_connect($dbServerName, $dbUserName, $dbPassword, $dbName);
