@@ -13,11 +13,12 @@ if ($mysqli->connect_errno) {
 $username = $_POST ["username"];
 $email = $_POST ["email"];
 $password = $_POST ["password"];
+$message = "";
 
 // update data to database
 $q = "INSERT INTO `users` (`username`, `email`, `password`) VALUES ('".$username."', '".$email."', '".$password."') ";
 if ($mysqli->query($q)) {
-    $message = "You meme has been updated.";
+    $message = "Your account has been created.";
 }
 // close connection
 mysqli_close($mysqli);

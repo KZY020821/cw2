@@ -28,9 +28,7 @@ if ($password == $row["password"]) {
     $gotopage = "login-signup.html";
     $color = "red";
 }
-echo $message;
-echo $gotopage;
-echo $color;
+
 // close connection
 mysqli_close($mysqli);
 ?>
