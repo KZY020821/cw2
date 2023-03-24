@@ -25,7 +25,7 @@ if ($password == $row["password"]) {
     $color = "green";
 } else {
     $message ="password wrong";
-    $gotopage = "login-signup.html";
+    $gotopage = "wrong-password.html";
     $color = "red";
 }
 
