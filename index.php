@@ -28,7 +28,7 @@
   $dbServerName = "localhost";
   $dbUserName = "root";
   $dbPassword = "";
-  $dbName = "5614ycom_cw2";
+  $dbName = "5614YCOM_CW";
   // connect the database with the server
   $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
 
