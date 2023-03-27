@@ -1,4 +1,9 @@
 <?php
+header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', FALSE);
+header('Pragma: no-cache');
+
 $dbServerName = "localhost";
 $dbUserName = "root";
 $dbPassword = "";
@@ -12,24 +17,23 @@ if ($mysqli->connect_errno) {
 }
 
 $username = $_POST["username"];
-$email = $_POST["email"];
 $password = $_POST["password"];
 $message = "";
 $color = "";
 $uploadOK = TRUE;
-$email_list = array();
+$username_list = array();
 
-//check email is taken or not
-$sql = "SELECT email FROM users;";
+//check username is taken or not
+$sql = "SELECT name FROM creator;";
 $result = mysqli_query($mysqli, $sql);
 while ($row = mysqli_fetch_assoc($result)) {
-    $num = count($email_list);
-    $inserted_value = $row["email"];
+    $num = count($username_list);
     $position = $num;
-    array_splice($email_list, $position, 0, $inserted_value);
+    $inserted_value = $row["name"];
+    array_splice($username_list, $position, 0, $inserted_value);
 }
 
-if (in_array($email, $email_list)) {
+if (in_array($username, $username_list)) {
     $message = "Your email has been taken.";
     $uploadOK = FALSE;
     $color = "red";
@@ -40,7 +44,7 @@ if (in_array($email, $email_list)) {
 
 if ($uploadOK == TRUE) {
     // update data to database
-    $q = "INSERT INTO `users` (`username`, `email`, `password`) VALUES ('" . $username . "', '" . $email . "', '" . $password . "') ";
+    $q = "INSERT INTO `creator` (`name`, `password`) VALUES ('" . $username . "', '" . $password . "') ";
     if ($mysqli->query($q)) {
         $message = "Your account has been created.";
     }

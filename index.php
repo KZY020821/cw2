@@ -1,3 +1,17 @@
+<?php
+    header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+    header('Cache-Control: post-check=0, pre-check=0', FALSE);
+    header('Pragma: no-cache');
+
+    if (isset($_COOKIE["admin"])) {
+      $goToPage = "create-meme.html";
+      $buttonValue = "Create Meme";
+    } else {
+      $goToPage = "login-signup.html";
+      $buttonValue = "Log In / Sign Up";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,22 +21,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MemeHub</title>
   <!-- connect to style.css -->
-  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <!-- header -->
-  <div class="container">
-    <h1>
-      MemeHub Inc.
-      <a href="create-meme.html">
-        <button class="button button2 btn-right">
-          Create Meme
-        </button>
-      </a>
-    </h1>
-    <h3>Homepage</h3>
-  </div>
+  <h1>MemeHub Inc.</h1>
+  <h3>Homepage</h3>
+  <p><a href="<?php echo $goToPage; ?>"><button><?php echo $buttonValue; ?></button></a></p>
 
   <?php
   $dbServerName = "localhost";
