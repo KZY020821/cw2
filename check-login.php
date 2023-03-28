@@ -28,7 +28,7 @@ if ($password == $row["password"]) {
     $message = "password correct";
     $gotopage = "index.php";
     $color = "green";
-    setcookie("admin", $row['username'], time() + (60 * 60)); // set cookie
+    setcookie("admin", $username, time() + (60 * 60)); // set cookie
 } else {
     $message = "password wrong";
     $gotopage = "wrong-password.html";

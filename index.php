@@ -8,7 +8,7 @@
       $goToPage = "create-meme.html";
       $buttonValue = "Create Meme";
     } else {
-      $goToPage = "login-signup.html";
+      $goToPage = "login-signup.php";
       $buttonValue = "Log In / Sign Up";
     }
 ?>
@@ -30,6 +30,9 @@
   <p><a href="<?php echo $goToPage; ?>"><button><?php echo $buttonValue; ?></button></a></p>
 
   <?php
+  if (isset($_COOKIE["admin"])) {
+    echo "<p><a href=\"logout.php\"><button>Log Out</button></a></p>";
+  }
   $dbServerName = "localhost";
   $dbUserName = "root";
   $dbPassword = "";
