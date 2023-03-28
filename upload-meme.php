@@ -1,3 +1,13 @@
+<?php
+header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', FALSE);
+header('Pragma: no-cache');
+// if do not have users cookie, redirect to index.php
+if (!isset($_COOKIE["admin"])) {
+    header("Location: index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +76,7 @@
 
     if ($uploadOk) {
         // insert data into database
-        $q = "INSERT INTO photo (title, comment, imageurl) VALUES ('" . $_POST['title'] . "', '" . $_POST['comment'] . "', '" . $newfilename . "')";
+        $q = "INSERT INTO photo (title, comment, imageurl, idcreator) VALUES ('" . $_POST['title'] . "', '" . $_POST['comment'] . "', '" . $newfilename . "', '" . $_POST['idcreator'] . "')";
         // execute SQL query.
         if ($mysqli->query($q)) {
             $message = "You meme has been created.";

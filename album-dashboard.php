@@ -1,53 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="index.php"> view meme</a>
 <?php
     header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
     header('Cache-Control: no-store, no-cache, must-revalidate');
     header('Cache-Control: post-check=0, pre-check=0', FALSE);
     header('Pragma: no-cache');
-?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MemeHub</title>
-  <!-- connect to style.css -->
-</head>
-
-<body>
-  <!-- header -->
-  <h1>MemeHub Inc.</h1>
-  <h3>Homepage</h3>
-  <?php
-  $dbServerName = "localhost";
-  $dbUserName = "root";
-  $dbPassword = "";
-  $dbName = "5614YCOM_CW";
-  // connect the database with the server
-  $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
-
-  // if error occurs 
-  if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-  }
-  if (isset($_COOKIE["admin"])) {
-    echo "<p><a href=\"logout.php\"><button>Log Out</button></a></p>";
-    //query select data from database
-    $sql = "SELECT `idcreator` FROM creator WHERE name = \"".$_COOKIE["admin"]."\";";
-    //execute query 
-    $result = mysqli_query($mysqli, $sql);
-    //display data row by row
-    while ($row = mysqli_fetch_assoc($result)) {
-    echo "<p><a href=\"profile-page.php?idcreator=" . urlencode(convert_uuencode($row['idcreator'])) . "\">View profile</a></p>"; 
-    echo "<form action=\"create-meme.php\"method=\"post\"enctype=\"multipart/form-data\">
-    <button>create meme</button>
-    <input type=\"hidden\" name=\"idcreator\" value=\"".$row['idcreator']."\"></form>";
+    // if do not have users cookie, redirect to index.php
+    if (!isset($_COOKIE["admin"])) {
+        header("Location: index.php");
     }
-    echo "<hr>";
-  } else {
-    echo "<p><a href=\"login-signup.php\"><button>Log In / Sign Up</button></a></p>";
-  }
+    $dbServerName = "localhost";
+    $dbUserName = "root";
+    $dbPassword = "";
+    $dbName = "5614YCOM_CW";
+    // connect the database with the server
+    $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
+
+    // if error occurs 
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+    }
+    $q = "SELECT title FROM album WHERE idalbum = \"".convert_uudecode($_GET["idalbum"])."\";";
+
+    //execute query 
+    $result = mysqli_query($mysqli, $q);
+  
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<h1>".$row["title"]." Album</h1>";
+    }
   // array for extension of image
   $img = array('jpeg', 'jpg', 'png', 'gif', 'tiff', 'psg', 'ai', 'pdf', 'eps', 'indd', 'raw');
   // array for extension of video
@@ -58,16 +46,11 @@
   $allfiletype = array_merge($img, $vid, $aud);
 
   //query select data from database
-  $sql = "SELECT photo.idphoto, photo.title, photo.comment, photo.imageurl, creator.name, creator.imageurl AS createrImageURL  
-  FROM (creator 
-    INNER JOIN photo 
-    ON creator.idcreator = photo.idcreator) 
-    ORDER BY `idphoto` DESC;";
+  $sql = "SELECT photo.idphoto, photo.title, photo.comment, photo.imageurl, creator.name, creator.imageurl AS createrImageURL FROM (creator INNER JOIN photo ON creator.idcreator = photo.idcreator) WHERE photo.idalbum = ".convert_uudecode($_GET["idalbum"]) ." ORDER BY photo.`idphoto` DESC;";
 
   //execute query 
   $result = mysqli_query($mysqli, $sql);
 
-  //display data row by row
   while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class=\"container\">";
     echo "<div class=\"box\">";
@@ -100,16 +83,15 @@
     else if (in_array($ext, $img)) {
       echo '<img src="memes/' . $row['imageurl'] . '" class="rounded" alt="' . $row['imageurl'] . '" width="50%" height="auto" />';
     }
-    echo "</div>";
+    // head to edit page of the specific idphoto (encoded)
+    echo "<br>";
+    echo "<a href=\"edit-meme.php?idphoto=" . urlencode(convert_uuencode($row['idphoto'])) . "\">Edit</a>";
+    echo "<br>";
+    // head to depete page of the specific idphoto (encoded)
+    echo "<a href=\"delete-meme.php?idphoto=" . urlencode(convert_uuencode($row['idphoto'])) . "\">Delete</a>";
+    echo "<br>";
     echo "<hr>";
-    echo "</div>";
-    echo "</div>";
   }
-  ?>
-</body>
-
-</html>
-<?php
-// close connection
-mysqli_close($mysqli);
 ?>
+</body>
+</html>

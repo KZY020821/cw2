@@ -22,15 +22,12 @@ if (!isset($_COOKIE["admin"])) {
       <!-- header -->
       <h1>
         MemeHub Inc.
-        <a href="index.php">
-          <button class="button button2 btn-right">View Meme</button>
-        </a>
       </h1>
-      <h3>Create Meme</h3>
+      <h3>Create Album</h3>
       <!-- box -->
       <div class="box martop15">
         <form
-          action="upload-meme.php"
+          action="upload-album.php"
           method="post"
           enctype="multipart/form-data"
         >
@@ -47,29 +44,15 @@ if (!isset($_COOKIE["admin"])) {
               />
             </div>
           </div>
-          <div class="row">
-            <div class="col-25">
-              <label for="comment">Comment</label>
-            </div>
-            <div class="col-75">
-              <textarea
-                name="comment"
-                id="comment"
-                placeholder="What's on your mind?"
-                rows="10"
-                cols="30"
-              ></textarea>
-            </div>
-          </div>
           <div class="row" style="margin-top: 20px">
-            <div class="col-25">Upload Meme</div>
+            <div class="col-25">Album Coverpage</div>
             <div class="col-75">
               <input type="file" name="fileToUpload" id="fileToUpload" />
             </div>
           </div>
           <input type="hidden" name="idcreator" value="<?php echo $_POST["idcreator"]; ?>">
           <button class="button button2 button3" type="submit" name="post">
-            Create
+            Post
           </button>
         </form>
       </div>

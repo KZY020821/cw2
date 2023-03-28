@@ -18,8 +18,6 @@ setcookie("admin", "", time() - 60);
 </head>
 <body>
 <h2 style="color: green;">You are logged out!!!</h2>
-<a href="login.php">Login</a>
-<br>
 <a href="index.php">See Memes</a>
 </body>
 </html>

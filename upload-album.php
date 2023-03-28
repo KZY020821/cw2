@@ -6,6 +6,7 @@ header('Pragma: no-cache');
 
 $dbServerName = "localhost";
 $dbUserName = "root";
+$idcreator = urlencode(convert_uuencode($_POST['idcreator']));
 $dbPassword = "";
 $dbName = "5614YCOM_CW";
 // connect the database with the server
@@ -15,30 +16,21 @@ $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
-
-$username = $_POST["username"];
-$password = $_POST["password"];
+$title = $_POST["title"];
+$imageurl = $_POST["imageurl"];
 $message = "";
+$gotopage = "";
 $color = "";
-$uploadOK = TRUE;
-$username_list = array();
 
-//check username is taken or not
-$sql = "SELECT name FROM creator;";
-$result = mysqli_query($mysqli, $sql);
-while ($row = mysqli_fetch_assoc($result)) {
-    $num = count($username_list);
-    $position = $num;
-    $inserted_value = $row["name"];
-    array_splice($username_list, $position, 0, $inserted_value);
-}
-
-if (in_array($username, $username_list)) {
-    $message = "Your email has been taken.";
-    $uploadOK = FALSE;
+$q = "SELECT * FROM `album`;";
+$result = $mysqli->query($q);
+$row = $result->fetch_assoc();
+if ($title == $row["title"]) {
+    $message = "title has been taken";
+    $gotopage = "create-album.php";
     $color = "red";
 } else {
-    $target_dir = "creator/"; // set target directory
+    $target_dir = "album/"; // set target directory
     $target_filename = basename($_FILES["fileToUpload"]["name"]); // set target filename
     $target_file = $target_dir . $target_filename; // concatenate
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -51,7 +43,7 @@ if (in_array($username, $username_list)) {
     if ($target_filename != NULL) {
         // create a unique ID for new file name
         $newfilename = uniqid() . "." . $imageFileType;
-        $newfiledir = "creator/" . $newfilename;
+        $newfiledir = "album/" . $newfilename;
         if (in_array($imageFileType, $img)) {
             $uploadOk = TRUE;
         } else {
@@ -73,13 +65,18 @@ if (in_array($username, $username_list)) {
 
     if ($uploadOk) {
         // insert data into database
-        $q = "INSERT INTO `creator` (`name`, `password`, `imageurl`) VALUES ('" . $username . "', '" . $password . "','".$newfilename."');";
+        $q = "INSERT INTO `album` (`idalbum`, `title`, `imageurl`, `idcreator`) VALUES (NULL, \"".$title."\",\"".$newfilename."\",\"".$_POST["idcreator"]."\");";
         // execute SQL query.
-        $mysqli->query($q);
+        if ($mysqli->query($q)) {
+            $message = "You meme has been created.";
+        }
+        $message = "album has been created";
+        $gotopage = "profile-page.php?idcreator=".$idcreator;
         $color = "green";
-        $message = "your account has been created.";
-    }
+    }    
 }
+
+
 // close connection
 mysqli_close($mysqli);
 ?>
@@ -94,7 +91,7 @@ mysqli_close($mysqli);
 </head>
 
 <body>
-    <form action="login-signup.php">
+<form action="<?php echo $gotopage; ?>"method="post"enctype="multipart/form-data">    
         <p style="color: <?php echo $color; ?>;"><?php echo $message; ?></p>
         <button type="submit">OK</button>
     </form>

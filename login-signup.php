@@ -29,6 +29,7 @@ if (isset($_COOKIE["admin"])) {
         <p><input type="text" name="username" id="username" placeholder="username"/></p>
         <p><input type="password" name="password" id="password" placeholder="password"/></p>
         <p><input type="password" name="confirm-password" id="confirm-password" placeholder="re-type password"/></p>
+        <p>Profile Picture:<br><input type="file" name="fileToUpload" id="fileToUpload" /></p>
         <button type="submit" name="post">Sign Up</button>
     </form>
 </body>
