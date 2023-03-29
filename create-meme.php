@@ -1,13 +1,3 @@
-<?php
-header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', FALSE);
-header('Pragma: no-cache');
-// if do not have users cookie, redirect to index.php
-if (!isset($_COOKIE["admin"])) {
-    header("Location: index.php");
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -29,22 +19,13 @@ if (!isset($_COOKIE["admin"])) {
       <h3>Create Meme</h3>
       <!-- box -->
       <div class="box martop15">
-        <form
-          action="upload-meme.php"
-          method="post"
-          enctype="multipart/form-data"
-        >
+        <form action="upload-meme.php"method="post"enctype="multipart/form-data">
           <div class="row">
             <div class="col-25">
               <label for="title">Title</label>
             </div>
             <div class="col-75">
-              <input
-                type="text"
-                name="title"
-                id="title"
-                placeholder="Enter a title"
-              />
+              <input type="text"name="title"id="title"placeholder="Enter a title"/>
             </div>
           </div>
           <div class="row">
@@ -52,14 +33,7 @@ if (!isset($_COOKIE["admin"])) {
               <label for="comment">Comment</label>
             </div>
             <div class="col-75">
-              <textarea
-                name="comment"
-                id="comment"
-                placeholder="What's on your mind?"
-                rows="10"
-                cols="30"
-              ></textarea>
-            </div>
+              <textarea name="comment"id="comment"placeholder="What's on your mind?"rows="10"cols="30"></textarea></div>
           </div>
           <div class="row" style="margin-top: 20px">
             <div class="col-25">Upload Meme</div>

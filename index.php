@@ -1,115 +1,33 @@
 <?php
-    header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
-    header('Cache-Control: no-store, no-cache, must-revalidate');
-    header('Cache-Control: post-check=0, pre-check=0', FALSE);
-    header('Pragma: no-cache');
+    if (isset($_COOKIE["admin"])) {
+        header("Location: view-meme.php" );
+        exit ();
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MemeHub</title>
-  <!-- connect to style.css -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In & Sign Up</title>
 </head>
-
 <body>
-  <!-- header -->
-  <h1>MemeHub Inc.</h1>
-  <h3>Homepage</h3>
-  <?php
-  $dbServerName = "localhost";
-  $dbUserName = "root";
-  $dbPassword = "";
-  $dbName = "5614YCOM_CW";
-  // connect the database with the server
-  $mysqli = new mysqli($dbServerName, $dbUserName, $dbPassword, $dbName);
-
-  // if error occurs 
-  if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-  }
-  if (isset($_COOKIE["admin"])) {
-    echo "<p><a href=\"logout.php\"><button>Log Out</button></a></p>";
-    //query select data from database
-    $sql = "SELECT `idcreator` FROM creator WHERE name = \"".$_COOKIE["admin"]."\";";
-    //execute query 
-    $result = mysqli_query($mysqli, $sql);
-    //display data row by row
-    while ($row = mysqli_fetch_assoc($result)) {
-    echo "<p><a href=\"profile-page.php?idcreator=" . urlencode(convert_uuencode($row['idcreator'])) . "\">View profile</a></p>"; 
-    echo "<form action=\"create-meme.php\"method=\"post\"enctype=\"multipart/form-data\">
-    <button>create meme</button>
-    <input type=\"hidden\" name=\"idcreator\" value=\"".$row['idcreator']."\"></form>";
-    }
-    echo "<hr>";
-  } else {
-    echo "<p><a href=\"login-signup.php\"><button>Log In / Sign Up</button></a></p>";
-  }
-  // array for extension of image
-  $img = array('jpeg', 'jpg', 'png', 'gif', 'tiff', 'psg', 'ai', 'pdf', 'eps', 'indd', 'raw');
-  // array for extension of video
-  $vid = array('mp4', 'mov', 'avi', 'wmv', 'avchd', 'flv', 'f4v', 'swf', 'mkv', 'webm', 'html5', 'mpeg-2');
-  // array for extension of audio
-  $aud = array('m4a', 'flac', 'mp3', 'wav', 'wma', 'aac');
-  // combine all extension into one array
-  $allfiletype = array_merge($img, $vid, $aud);
-
-  //query select data from database
-  $sql = "SELECT photo.idphoto, photo.title, photo.comment, photo.imageurl, creator.name, creator.imageurl AS createrImageURL  
-  FROM (creator 
-    INNER JOIN photo 
-    ON creator.idcreator = photo.idcreator) 
-    ORDER BY `idphoto` DESC;";
-
-  //execute query 
-  $result = mysqli_query($mysqli, $sql);
-
-  //display data row by row
-  while ($row = mysqli_fetch_assoc($result)) {
-    echo "<div class=\"container\">";
-    echo "<div class=\"box\">";
-    if ($row['createrImageURL']!= NULL){
-      echo '<img src="creator/' . $row['createrImageURL'] . '" class="rounded" alt=" " width="50px" height="auto" />';
-    }
-    echo "<h2><b>Username:</b>" . $row['name'] . "</h2>";
-    echo "<h3><b>Title:</b>" . $row['title'] . "</h3>";
-    echo "<p>Comment: " . $row['comment'] . "</p>";
-    echo "<div class=\"container-img\">";
-
-    // get the extension of the media file
-    $ext = strtolower(pathinfo($row['imageurl'], PATHINFO_EXTENSION));;
-
-    // if it exist in video array extension, display:
-    if (in_array($ext, $vid)) {
-      echo "<p><video controls>\n";
-      echo "<source src=\"memes/" . $row['imageurl'] . "\" type=\"video/mp4\">\n";
-      echo 'Your browser does not support the video tag.';
-      echo '</video></p>';
-    }
-    // if it exist in audio array extension, display:
-    else if (in_array($ext, $aud)) {
-      echo "<audio controls>
-                    <source src=\"memes/" . $row['imageurl'] . "\" type=\"audio/mpeg\" >
-                            Your browser does not support the audio element.
-                        </audio>";
-    }
-    // if it exist in image array extension, display:
-    else if (in_array($ext, $img)) {
-      echo '<img src="memes/' . $row['imageurl'] . '" class="rounded" alt="' . $row['imageurl'] . '" width="50%" height="auto" />';
-    }
-    echo "</div>";
-    echo "<hr>";
-    echo "</div>";
-    echo "</div>";
-  }
-  ?>
+    <h1>Login</h1>
+    <form action="check-login.php" method="post" enctype="multipart/form-data">
+        <p><input type="text" name="username" id="username" placeholder="username"/></p>
+        <p><input type="password" name="password" id="password" placeholder="password"/></p>
+        <button type="submit" name="post">Log In</button>
+    </form>
+    <hr>
+    <h1>Signup</h1>
+    <form action="check-signup.php" method="post" enctype="multipart/form-data">
+        <p><input type="text" name="username" id="username" placeholder="username"/></p>
+        <p><input type="password" name="password" id="password" placeholder="password"/></p>
+        <p><input type="password" name="confirm-password" id="confirm-password" placeholder="re-type password"/></p>
+        <p>Profile Picture:<br><input type="file" name="fileToUpload" id="fileToUpload" /></p>
+        <button type="submit" name="post">Sign Up</button>
+    </form>
 </body>
-
 </html>
-<?php
-// close connection
-mysqli_close($mysqli);
-?>
