@@ -17,8 +17,10 @@
         <form action="upload-meme.php"method="post"enctype="multipart/form-data">
               <label for="title">Title</label>
               <input type="text"name="title"id="title"placeholder="Enter a title"/>
+              <br>
               <label for="comment">Comment</label>
-              <textarea name="comment"id="comment"placeholder="What's on your mind?"rows="10"cols="30"></textarea></div>
+              <textarea name="comment"id="comment"placeholder="What's on your mind?"rows="10"cols="30"></textarea>
+              <br>
               Upload Meme <input type="file" name="fileToUpload" id="fileToUpload" />
               <input type="hidden" name="idcreator" value="<?php echo $_POST["idcreator"]; ?>">
               <button type="submit" name="post">Create</button>
