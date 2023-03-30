@@ -37,7 +37,7 @@
     }
     echo "<hr>";
   } else {
-    echo "<p><a href=\"login-signup.php\"><button>Log In / Sign Up</button></a></p>";
+    echo "<p><a href=\"index.php\"><button>Log In / Sign Up</button></a></p>";
   }
   // show memes part (no edit, delete, add to album function)
   // query select data from database
