@@ -1,7 +1,6 @@
 <?php
     include_once "connect-database.php";
-    $sql = "SELECT * FROM creator WHERE creator.name =" . $_COOKIE["admin"] . ";";
-    $result = $mysqli->query($sql);
+    $result = $mysqli->query("SELECT * FROM creator WHERE creator.name =\"" . $_COOKIE["admin"] . "\";");
     while ($row = $result->fetch_assoc()) {
         $fileloc = "creator/" . $row["imageurl"];
         if ($row["imageurl"] != "default.png") {
