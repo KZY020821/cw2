@@ -9,7 +9,7 @@
         }
     }
 
-    $deletePhoto = "SELECT * FROM photo WHERE idcreator = (SELECT idcreator FROM creator WHERE creator.name =" . $_COOKIE["admin"] . ");";
+    $deletePhoto = "SELECT * FROM photo WHERE idcreator = (SELECT idcreator FROM creator WHERE creator.name =\"" . $_COOKIE["admin"] . "\");";
     $result = $mysqli->query($deletePhoto);
     while ($row = $result->fetch_assoc()) {
         $fileloc = "memes/" . $row["imageurl"];
