@@ -1,36 +1,27 @@
 <?php
     include_once "connect-database.php";
-
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    $uploadOK = TRUE;
+    include_once "file-type.php";
+    
+    $uploadOK = TRUE; // variable to determine if upload was successful
     $username_list = array();
 
     //check username is taken or not
     $sql = "SELECT name FROM creator;";
     $result = mysqli_query($mysqli, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
-        $num = count($username_list);
-        $position = $num;
-        $inserted_value = $row["name"];
-        array_splice($username_list, $position, 0, $inserted_value);
+        array_splice($username_list, count($username_list), 0, $row["name"]);
     }
 
-    if (in_array($username, $username_list)) {
+    if (in_array($_POST["username"], $username_list)) {
         $uploadOK = FALSE;
         header("Location: index.php" );
         exit ();
+        // cookie message failed
     } else {
         $target_dir = "creator/"; // set target directory
         $target_filename = basename($_FILES["fileToUpload"]["name"]); // set target filename
         $target_file = $target_dir . $target_filename; // concatenate
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        $uploadOk = TRUE; // variable to determine if upload was successful
-
-        // array for extension of image
-        $img = array("jpeg", "jpg", "png", "gif", "tiff", "psg", "ai", "pdf", "eps", "indd", "raw");
-        $message = "";
-
         if ($target_filename != NULL) {
             // create a unique ID for new file name
             $newfilename = uniqid() . "." . $imageFileType;
@@ -38,33 +29,37 @@
             if (in_array($imageFileType, $img)) {
                 $uploadOk = TRUE;
             } else {
-                $message = "ERROR, media extension is not supported.";
                 $uploadOk = FALSE;
+                header("Location: index.php" );
+                exit ();
             }
 
-            if ($uploadOk) {
+            if ($uploadOk == TRUE) {
                 if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
                     // rename new file
                     rename($target_file, $newfiledir);
                 } else {
-                    $message = "Something went wrong, please try again later.";
+                    $uploadOk = FALSE;
+                    header("Location: index.php" );
+                    exit ();
                 }
-            }
+            } 
         } else {
-            $newfilename = NULL;
+            // https://www.flaticon.com/free-icon/user_221729d
+            $newfilename = "default.png";
+            $uploadOK = TRUE;
         }
 
-        if ($uploadOk) {
+        if ($uploadOK == TRUE) {
             // insert data into database
-            $q = "INSERT INTO `creator` (`name`, `password`, `imageurl`) VALUES ('" . $username . "', '" . $password . "','".$newfilename."');";
+            $q = "INSERT INTO `creator` (`name`, `password`, `imageurl`) VALUES ('" . $_POST["username"] . "', '" . $_POST["password"] . "','".$newfilename."');";
             // execute SQL query.
             if ($mysqli->query($q)){
-            setcookie("admin", $username, time() + (60 * 60)); // set cookie
+                setcookie("admin", $_POST["username"], time() + (60 * 60)); // set cookie
+                header("Location: view-meme.php" );
+                exit ();
             }
         }
-
-        header("Location: view-meme.php" );
-        exit ();
     }
     // close connection
     mysqli_close($mysqli);
