@@ -17,7 +17,11 @@
         header("Location: index.php" );
         exit ();
         // cookie message failed
-    } else {
+    } else if ($_POST["password"] != $_POST["confirm-password"]) {
+        $uploadOK = FALSE;
+        header("Location: index.php" );
+        exit ();
+    }else {
         $target_dir = "creator/"; // set target directory
         $target_filename = basename($_FILES["fileToUpload"]["name"]); // set target filename
         $target_file = $target_dir . $target_filename; // concatenate
